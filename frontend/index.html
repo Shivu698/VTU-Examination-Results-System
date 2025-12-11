@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<body style="font-family:Arial;max-width:600px;margin:40px auto">
+
+<h2>VTU Examination Result Viewer</h2>
+
+<input id="usn" placeholder="Enter USN (e.g. 1RV22CS001)">
+<button onclick="showResults()">Get Results</button>
+
+<div id="output" style="margin-top:20px;"></div>
+
+<script>
+function showResults() {
+    let usn = document.getElementById("usn").value;
+
+    fetch("http://127.0.0.1:5000/api/results/" + usn)
+      .then(res => res.json())
+      .then(data => {
+        if (data.results.length === 0) {
+            document.getElementById("output").innerHTML = "No results found!";
+        } else {
+            let html = "<h3>Results for " + data.usn + "</h3><ul>";
+            data.results.forEach(r => {
+                html += "<li>" + r.subject + " : " + r.marks + "</li>";
+            });
+            html += "</ul>";
+            document.getElementById("output").innerHTML = html;
+        }
+      });
+}
+</script>
+
+</body>
+</html>
